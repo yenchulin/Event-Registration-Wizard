@@ -2,15 +2,13 @@ import js from '@eslint/js'
 import prettierConfig from 'eslint-config-prettier'
 import prettierPlugin from 'eslint-plugin-prettier'
 import simpleImportSort from 'eslint-plugin-simple-import-sort'
+import unusedImports from 'eslint-plugin-unused-imports'
 import pluginVue from 'eslint-plugin-vue'
 import globals from 'globals'
 import vueParser from 'vue-eslint-parser'
-import unusedImports from 'eslint-plugin-unused-imports'
 
 export default [
-  {
-    ignores: ['dist/**', '.quasar/**', 'node_modules/**'],
-  },
+  { ignores: ['dist/**', '.quasar/**', 'node_modules/**'] },
 
   js.configs.recommended,
   ...pluginVue.configs['flat/recommended'],
@@ -45,7 +43,10 @@ export default [
 
       // Simple Import Sort
       'simple-import-sort/imports': 'warn',
-      'simple-import-sort/exports': 'warn',
+      'simple-import-sort/exports': [
+        'warn',
+        { groups: [['^react', '^@?\\w', '^\\.', '^\\u0000']] },
+      ],
 
       // Unused Imports
       'no-unused-vars': 'off',
