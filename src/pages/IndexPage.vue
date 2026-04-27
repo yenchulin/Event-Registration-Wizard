@@ -4,7 +4,7 @@ import StepAttendeeInfo from '@/components/wizard/steps/StepAttendeeInfo.vue'
 import StepSessionSelection from '@/components/wizard/steps/StepSessionSelection.vue'
 import StepAddons from '@/components/wizard/steps/StepAddons.vue'
 import Logo from '@/assets/icons/Logo.svg'
-import BaseButton from '@/components/wizard/general/BaseButton.vue'
+import BaseButton from '@/components/wizard/BaseButton.vue'
 import { useWizardSteps } from '@/composables/useWizardSteps'
 
 const actionType = Object.freeze({

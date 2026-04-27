@@ -1,6 +1,6 @@
 <script setup>
 import { computed, ref } from 'vue'
-import SessionCard from '@/components/wizard/general/SessionCard.vue'
+import SessionCard from '@/components/wizard/SessionCard.vue'
 import { useRegistrationWizard } from '@/composables/useRegistrationWizard'
 import moment from 'moment'
 

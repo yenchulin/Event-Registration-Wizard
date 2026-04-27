@@ -1,6 +1,6 @@
 <script setup>
 import { useRegistrationWizard } from '@/composables/useRegistrationWizard'
-import InputField from '@/components/wizard/general/InputField.vue'
+import InputField from '@/components/wizard/InputField.vue'
 
 const { attendee, ticketTypes, selectedTicketTypeId, selectTicketType } = useRegistrationWizard()
 </script>
