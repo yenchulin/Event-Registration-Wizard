@@ -1,5 +1,5 @@
-import { computed, reactive, ref } from 'vue'
-import { event } from '../mocks/event'
+import { computed, ref } from 'vue'
+import { event } from '@/mocks/event'
 
 const selectedTicketTypeId = ref(event.ticketTypes[0]?.id ?? '')
 const ticketTypes = computed(() => event.ticketTypes)

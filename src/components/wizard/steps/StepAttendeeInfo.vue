@@ -1,5 +1,5 @@
 <script setup>
-import { useRegistrationWizard } from '../../../composables/useRegistrationWizard'
+import { useRegistrationWizard } from '@/composables/useRegistrationWizard'
 
 const { ticketTypes, selectedTicketTypeId, selectTicketType } = useRegistrationWizard()
 </script>
