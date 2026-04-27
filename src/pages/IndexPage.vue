@@ -1,11 +1,11 @@
 <script setup>
-import { ref } from 'vue'
 import StepReviewSubmit from '../components/wizard/steps/StepReviewSubmit.vue'
 import StepAttendeeInfo from '../components/wizard/steps/StepAttendeeInfo.vue'
 import StepSessionSelection from '../components/wizard/steps/StepSessionSelection.vue'
 import StepAddons from '../components/wizard/steps/StepAddons.vue'
 import Logo from '../assets/icons/Logo.svg'
 import BaseButton from '../components/wizard/general/BaseButton.vue'
+import { useWizardSteps } from '../composables/useWizardSteps'
 
 const actionType = Object.freeze({
   next: 0,
@@ -43,13 +43,7 @@ const wizardSteps = [
   },
 ]
 
-const currentStep = ref(1)
-const goNext = () => {
-  currentStep.value += 1
-}
-const goBack = () => {
-  currentStep.value -= 1
-}
+const { currentStep, goBack, goNext } = useWizardSteps(wizardSteps.length)
 </script>
 
 <template>
