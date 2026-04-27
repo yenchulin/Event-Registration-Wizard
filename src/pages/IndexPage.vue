@@ -50,9 +50,9 @@ const { currentStep, goBack, goNext } = useWizardSteps(wizardSteps.length)
   <q-layout>
     <q-page-container>
       <q-page class="bg-surface-l0">
-        <div class="px-12 py-4 flex gap-3">
+        <div class="px-12 py-4 flex gap-3 items-center">
           <img :src="Logo" />
-          <h4 class="text-h4 text-neutral">WebDev Summit 2028</h4>
+          <span class="text-h4 text-neutral">WebDev Summit 2028</span>
         </div>
 
         <q-separator color="divider-default" />
