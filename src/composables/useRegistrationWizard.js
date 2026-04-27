@@ -19,6 +19,7 @@ function selectTicketType(ticketTypeId) {
   selectedTicketTypeId.value = ticketTypeId
 }
 
+const selectedSessionIds = ref(new Set([]))
 const eventDates = computed(() => event.dates ?? [])
 const sessionsByDay = computed(() => {
   const grouped = {}
@@ -33,13 +34,23 @@ const sessionsByDay = computed(() => {
   return grouped
 })
 
+function toggleSession(sessionId) {
+  if (selectedSessionIds.value.has(sessionId)) {
+    selectedSessionIds.value.delete(sessionId)
+  } else {
+    selectedSessionIds.value.add(sessionId)
+  }
+}
+
 export function useRegistrationWizard() {
   return {
     attendee,
     ticketTypes,
     selectedTicketTypeId,
     selectTicketType,
+    selectedSessionIds,
     eventDates,
     sessionsByDay,
+    toggleSession,
   }
 }

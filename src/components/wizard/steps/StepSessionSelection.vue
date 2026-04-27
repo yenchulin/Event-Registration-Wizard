@@ -4,7 +4,7 @@ import SessionCard from '@/components/wizard/general/SessionCard.vue'
 import { useRegistrationWizard } from '@/composables/useRegistrationWizard'
 import moment from 'moment'
 
-const { eventDates, sessionsByDay } = useRegistrationWizard()
+const { eventDates, sessionsByDay, selectedSessionIds, toggleSession } = useRegistrationWizard()
 
 const selectedDate = ref(eventDates.value[0])
 
@@ -15,6 +15,7 @@ const dayTabs = computed(() =>
   }))
 )
 const sessionsForSelectedDay = computed(() => sessionsByDay.value[selectedDate.value] ?? [])
+const selectedSessionCount = computed(() => selectedSessionIds.value.size)
 
 function selectDate(dateId) {
   selectedDate.value = dateId
@@ -42,13 +43,20 @@ function selectDate(dateId) {
       </button>
     </div>
 
-    <span class="text-body-sm-medium text-brand-emphasis">0 sessions selected</span>
+    <span class="text-body-sm-medium text-brand-emphasis"
+      >{{
+        `${selectedSessionCount} ${selectedSessionCount <= 1 ? 'session' : 'sessions'}`
+      }}
+      selected</span
+    >
 
     <div class="grid grid-cols-2 gap-4">
       <session-card
         v-for="session in sessionsForSelectedDay"
         :key="session.id"
         :session="session"
+        :selected="selectedSessionIds.has(session.id)"
+        @toggle="toggleSession"
       />
     </div>
   </section>

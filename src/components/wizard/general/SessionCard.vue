@@ -7,6 +7,8 @@ const props = defineProps({
   selected: { type: Boolean, default: false },
 })
 
+const emit = defineEmits(['toggle'])
+
 const SessionTrack = {
   frontend: 'frontend',
   backend: 'backend',
@@ -31,9 +33,13 @@ const capacityRatio = computed(() => {
 })
 
 const cardClass = computed(() => {
-  if (remainingSpots.value === 0) return 'border border-neutral-muted bg-surface-l2'
-  if (props.selected) return 'border-2 border-brand-emphasis bg-brand-muted-rest cursor-pointer'
-  return 'border border-neutral-muted bg-surface-l0 cursor-pointer'
+  if (remainingSpots.value === 0) {
+    return 'border-neutral-muted bg-surface-l2'
+  } else if (props.selected) {
+    return 'border-brand-emphasis bg-brand-muted-rest cursor-pointer'
+  } else {
+    return 'border-neutral-muted bg-surface-l0 cursor-pointer'
+  }
 })
 
 const badgeClass = computed(() => {
@@ -87,13 +93,18 @@ const progressBarTextClass = computed(() => {
     return 'text-brand-emphasis'
   }
 })
+
+function handleToggle(event) {
+  emit('toggle', props.session.id, event)
+}
 </script>
 
 <template>
   <button
     type="button"
     :class="cardClass"
-    class="text-left p-4 rounded-[6px] border-solid transition-colors"
+    class="text-left p-4 rounded-[6px] border-2 border-solid transition-colors"
+    @click="handleToggle"
   >
     <div class="flex flex-col gap-2">
       <div class="flex justify-between items-center">
@@ -104,6 +115,7 @@ const progressBarTextClass = computed(() => {
           <span class="text-body-xs-medium" :class="badgeTextClass">{{ trackLabel }}</span>
         </div>
         <div
+          v-if="remainingSpots > 0"
           class="w-4 h-4 rounded-[2px] border border-solid flex items-center justify-center"
           :class="[
             selected
