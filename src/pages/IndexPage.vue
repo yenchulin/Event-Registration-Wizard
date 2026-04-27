@@ -7,33 +7,38 @@ import StepAddons from '../components/wizard/steps/StepAddons.vue'
 import Logo from '../assets/icons/Logo.svg'
 import BaseButton from '../components/wizard/general/BaseButton.vue'
 
+const actionType = Object.freeze({
+  next: 0,
+  submit: 1,
+})
+
 const wizardSteps = [
   {
     id: 1,
     title: 'Attendee Info',
     component: StepAttendeeInfo,
-    nextTitle: 'Session Selection',
+    action: { type: actionType.next, label: 'Next: Sessions' },
     hasBack: false,
   },
   {
     id: 2,
     title: 'Sessions',
     component: StepSessionSelection,
-    nextTitle: 'Add-ons',
+    action: { type: actionType.next, label: 'Next: Add-ons' },
     hasBack: true,
   },
   {
     id: 3,
     title: 'Add-ons',
     component: StepAddons,
-    nextTitle: 'Review',
+    action: { type: actionType.next, label: 'Next: Review' },
     hasBack: true,
   },
   {
     id: 4,
     title: 'Review',
     component: StepReviewSubmit,
-    nextTitle: 'Session Selection',
+    action: { type: actionType.submit, label: 'Submit Registration' },
     hasBack: true,
   },
 ]
@@ -53,7 +58,7 @@ const goBack = () => {
       <q-page class="bg-surface-l0">
         <div class="px-12 py-4 flex gap-3">
           <img :src="Logo" />
-          <h1 class="text-h4 text-neutral">WebDev Summit 2028</h1>
+          <h4 class="text-h4 text-neutral">WebDev Summit 2028</h4>
         </div>
 
         <q-separator color="divider-default" />
@@ -72,12 +77,15 @@ const goBack = () => {
               <component :is="step.component" />
               <q-stepper-navigation>
                 <div class="flex justify-between">
-                  <base-button v-if="step.hasBack" :is-primary="false" :on-click="goBack">
+                  <base-button v-if="step.hasBack" :is-primary="false" @click="goBack">
                     Back
                   </base-button>
                   <div v-else></div>
-                  <base-button :on-click="goNext">
-                    {{ `Next: ${step.nextTitle}` }}
+                  <base-button v-if="step.action.type === actionType.next" @click="goNext">
+                    {{ step.action.label }}
+                  </base-button>
+                  <base-button v-else-if="step.action.type === actionType.submit">
+                    {{ step.action.label }}
                   </base-button>
                 </div>
               </q-stepper-navigation>
