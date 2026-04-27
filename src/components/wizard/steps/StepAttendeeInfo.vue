@@ -15,11 +15,11 @@ const { attendee, ticketTypes, selectedTicketTypeId, selectTicketType } = useReg
           v-for="ticket in ticketTypes"
           :key="ticket.id"
           type="button"
-          class="flex flex-col gap-3 text-left p-5 rounded-md transition-colors cursor-pointer"
+          class="flex flex-col gap-3 text-left p-5 rounded-md border-2 border-solid transition-colors cursor-pointer"
           :class="[
             selectedTicketTypeId === ticket.id
-              ? 'border-2 border-brand-emphasis bg-brand-muted-rest'
-              : 'border border-neutral-muted bg-surface-l1',
+              ? 'border-brand-emphasis bg-brand-muted-rest'
+              : 'border-neutral-muted bg-surface-l1',
           ]"
           @click="selectTicketType(ticket.id)"
         >
