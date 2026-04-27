@@ -1,6 +1,7 @@
 import { computed, reactive, ref } from 'vue'
 import { event } from '@/mocks/event'
 import { sessions } from '@/mocks/sessions'
+import { addons } from '@/mocks/addons'
 import moment from 'moment'
 
 const attendee = reactive({
@@ -42,6 +43,19 @@ function toggleSession(sessionId) {
   }
 }
 
+const addonsByCategory = computed(() => {
+  const grouped = {}
+  addons.forEach((a) => {
+    if (grouped[a.category]) {
+      grouped[a.category].push(a)
+    } else {
+      grouped[a.category] = [a]
+    }
+  })
+  return grouped
+})
+const addonCategories = computed(() => Object.keys(addonsByCategory.value ?? {}))
+
 export function useRegistrationWizard() {
   return {
     attendee,
@@ -52,5 +66,7 @@ export function useRegistrationWizard() {
     eventDates,
     sessionsByDay,
     toggleSession,
+    addonsByCategory,
+    addonCategories,
   }
 }

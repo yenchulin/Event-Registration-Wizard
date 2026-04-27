@@ -1,6 +1,7 @@
 <script setup>
 import { computed, ref } from 'vue'
 import SessionCard from '@/components/wizard/SessionCard.vue'
+import ButtonToggle from '@/components/wizard/ButtonToggle.vue'
 import { useRegistrationWizard } from '@/composables/useRegistrationWizard'
 import moment from 'moment'
 
@@ -8,7 +9,7 @@ const { eventDates, sessionsByDay, selectedSessionIds, toggleSession } = useRegi
 
 const selectedDate = ref(eventDates.value[0])
 
-const dayTabs = computed(() =>
+const dateTabs = computed(() =>
   eventDates.value.map((date) => ({
     id: date,
     label: moment(date).format('MMM DD'),
@@ -26,22 +27,7 @@ function selectDate(dateId) {
   <section class="grid gap-6">
     <span class="text-h3 text-neutral">Select Sessions</span>
 
-    <div class="flex gap-1 w-fit rounded-[10px] p-1 bg-surface-l2">
-      <button
-        v-for="tab in dayTabs"
-        :key="tab.id"
-        type="button"
-        class="px-4 py-2 rounded-lg transition-colors border-0 text-[13px]"
-        :class="[
-          selectedDate === tab.id
-            ? 'bg-brand-emphasis-rest text-inverse font-semibold'
-            : 'bg-transparent text-neutral-muted font-medium cursor-pointer',
-        ]"
-        @click="selectDate(tab.id)"
-      >
-        {{ tab.label }}
-      </button>
-    </div>
+    <button-toggle :items="dateTabs" :selected="selectedDate" @select="selectDate" />
 
     <span class="text-body-sm-medium text-brand-emphasis"
       >{{
