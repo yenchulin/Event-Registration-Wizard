@@ -34,8 +34,12 @@ export const typographyShortcuts = [
       'text-[length:var(--font-size-subtitle1)] line-height-[var(--line-height-subtitle1)] font-semibold',
     'text-subtitle2':
       'text-[length:var(--font-size-subtitle2)] line-height-[var(--line-height-subtitle2)] font-semibold',
+    'text-body-lg-regular':
+      'text-[length:var(--font-size-lg)] line-height-[var(--line-height-lg)] font-regular',
     'text-body-sm-regular':
       'text-[length:var(--font-size-sm)] line-height-[var(--line-height-sm)] font-regular',
+    'text-body-sm-medium':
+      'text-[length:var(--font-size-sm)] line-height-[var(--line-height-sm)] font-medium',
     'text-body-xs-medium':
       'text-[length:var(--font-size-xs)] line-height-[var(--line-height-xs)] font-medium',
   },

@@ -1,11 +1,12 @@
 <script setup>
 import { useRegistrationWizard } from '@/composables/useRegistrationWizard'
+import InputField from '@/components/wizard/general/InputField.vue'
 
-const { ticketTypes, selectedTicketTypeId, selectTicketType } = useRegistrationWizard()
+const { attendee, ticketTypes, selectedTicketTypeId, selectTicketType } = useRegistrationWizard()
 </script>
 
 <template>
-  <section>
+  <section class="grid gap-8">
     <div class="grid gap-4">
       <span class="text-subtitle1 text-neutral">Select Ticket Type</span>
 
@@ -40,6 +41,47 @@ const { ticketTypes, selectedTicketTypeId, selectTicketType } = useRegistrationW
             <span class="text-body-xs-medium text-inverse">Selected</span>
           </div>
         </button>
+      </div>
+    </div>
+
+    <div class="grid gap-8">
+      <span class="text-h3 text-neutral">Attendee Information</span>
+
+      <div class="grid gap-5">
+        <div class="grid grid-cols-2 gap-4">
+          <input-field
+            v-model="attendee.fullName"
+            label="Full Name"
+            placeholder="Enter your full name"
+          />
+          <input-field
+            v-model="attendee.email"
+            label="Email"
+            placeholder="Enter your email"
+            type="email"
+          />
+          <input-field
+            v-model="attendee.phone"
+            label="Phone"
+            placeholder="Enter your phone number"
+            type="tel"
+          />
+          <input-field
+            v-model="attendee.company"
+            label="Company"
+            placeholder="Enter your company"
+          />
+        </div>
+        <input-field
+          v-model="attendee.jobTitle"
+          label="Job Title"
+          placeholder="Enter your job title"
+        />
+        <input-field
+          v-model="attendee.shippingAddress"
+          label="Shipping Address (Optional)"
+          placeholder="Enter your shipping address"
+        />
       </div>
     </div>
   </section>
