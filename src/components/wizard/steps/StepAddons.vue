@@ -53,6 +53,20 @@ function hasTimeConflict(addon) {
 
       <button-toggle :items="categoryTabs" :selected="selectedCategory" @select="selectCategory" />
 
+      <div
+        v-if="selectedAddons.some((addon) => addon.category === CATEGORIES.merchandise.id)"
+        class="flex gap-3 p-4 rounded-lg border border-solid border-info-opacity bg-info-subtle-rest"
+      >
+        <q-icon name="info" class="text-info font-size-lg" />
+        <div class="flex flex-col gap-1">
+          <span class="text-subtitle2 text-neutral">Shipping Information</span>
+          <span class="font-size-md line-height-md text-neutral"
+            >Merchandise items will be shipped to your address one week before the conference.
+            Please ensure your shipping address in Step 1 is correct.</span
+          >
+        </div>
+      </div>
+
       <div v-for="addon in addonsForSelectedCategory" :key="addon.id">
         <merchandise-addon-card
           v-if="addon.category === CATEGORIES.merchandise.id"
