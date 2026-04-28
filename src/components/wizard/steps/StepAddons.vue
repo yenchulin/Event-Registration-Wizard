@@ -4,13 +4,18 @@ import ButtonToggle from '@/components/wizard/ButtonToggle.vue'
 import { useRegistrationWizard } from '@/composables/useRegistrationWizard'
 
 const { addonCategories } = useRegistrationWizard()
+const categoryLabelMap = {
+  workshop: 'Workshops',
+  meal: 'Meal Packages',
+  merchandise: 'Merchandise',
+}
 
-const selectedAddon = ref(addonCategories.value[0]?.id ?? '')
+const selectedAddon = ref(Object.keys(categoryLabelMap)[0])
 
 const addonTabs = computed(() =>
   addonCategories.value.map((category) => ({
     id: category,
-    label: category.charAt(0).toUpperCase() + category.slice(1),
+    label: categoryLabelMap[category] ?? category,
   }))
 )
 
