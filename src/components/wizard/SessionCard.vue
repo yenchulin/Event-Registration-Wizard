@@ -33,7 +33,7 @@ const cardClass = computed(() => {
   if (remainingSpots.value === 0) {
     return 'border-neutral-muted bg-surface-l2'
   } else if (selected) {
-    return 'border-brand-emphasis bg-brand-muted-rest cursor-pointer'
+    return 'border-brand-emphasis bg-brand-subtle-rest cursor-pointer'
   } else {
     return 'border-neutral-muted bg-surface-l0 cursor-pointer'
   }

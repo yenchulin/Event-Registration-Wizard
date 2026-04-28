@@ -18,7 +18,7 @@ const { attendee, ticketTypes, selectedTicketTypeId, selectTicketType } = useReg
           class="flex flex-col gap-3 text-left p-5 rounded-md border-2 border-solid transition-colors cursor-pointer"
           :class="[
             selectedTicketTypeId === ticket.id
-              ? 'border-brand-emphasis bg-brand-muted-rest'
+              ? 'border-brand-emphasis bg-brand-subtle-rest'
               : 'border-neutral-muted bg-surface-l1',
           ]"
           @click="selectTicketType(ticket.id)"

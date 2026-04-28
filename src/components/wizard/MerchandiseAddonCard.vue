@@ -12,7 +12,7 @@ const emit = defineEmits(['selectSize', 'addQuantity', 'removeQuantity'])
 const maxQuantity = computed(() => addon.maxQuantity ?? 1)
 const cardClass = computed(() => {
   if (selectedOption.quantity > 0) {
-    return 'border-brand-emphasis bg-brand-muted-rest'
+    return 'border-brand-emphasis bg-brand-subtle-rest'
   } else {
     return 'border-neutral-muted bg-surface-l0'
   }
