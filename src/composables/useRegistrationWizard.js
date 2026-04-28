@@ -54,6 +54,11 @@ const selectedSessionDateRanges = computed(() => {
     }
   })
 })
+const selectedSessions = computed(() => {
+  return Array.from(selectedSessionIds.value).map((sessionId) => {
+    return sessionsById.value[sessionId]
+  })
+})
 
 function toggleSession(sessionId) {
   if (selectedSessionIds.value.has(sessionId)) {
@@ -157,6 +162,7 @@ export function useRegistrationWizard() {
     selectedSessionIds,
     eventDates,
     sessionsByDay,
+    selectedSessions,
     toggleSession,
     selectedSessionDateRanges,
     /** addons selection */
