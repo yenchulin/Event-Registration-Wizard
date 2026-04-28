@@ -13,6 +13,7 @@ const {
   addonsByCategory,
   addonSelectionState,
   selectedAddons,
+  workshopVipDiscount,
   toggleAddon,
   increaseAddonQuantity,
   decreaseAddonQuantity,
@@ -97,6 +98,13 @@ function hasTimeConflict(addon) {
         <span class="text-body-sm-regular text-neutral-muted">{{
           formatCurrency(addon.price * addon.quantity)
         }}</span>
+      </div>
+
+      <div v-if="workshopVipDiscount > 0" class="flex justify-between items-center">
+        <span class="text-body-xs-regular text-brand-emphasis">Workshop discount (VIP 10%)</span>
+        <span class="text-body-xs-regular text-brand-emphasis"
+          >-{{ formatCurrency(workshopVipDiscount) }}</span
+        >
       </div>
 
       <q-separator color="divider-default" />

@@ -3,6 +3,7 @@ import { event } from '@/mocks/event'
 import { sessions } from '@/mocks/sessions'
 import { addons } from '@/mocks/addons'
 import moment from 'moment'
+import { CATEGORIES } from '@/utils/constants'
 
 /** attendee info */
 const attendee = reactive({
@@ -97,6 +98,17 @@ const selectedAddons = computed(() =>
     return acc
   }, [])
 )
+const workshopVipDiscount = computed(() => {
+  if (selectedTicket.value?.id === 'vip') {
+    return selectedAddons.value.reduce((sum, addon) => {
+      if (addon.category === CATEGORIES.workshop.id) {
+        return sum + addon.price * addon.quantity * 0.1
+      }
+      return sum
+    }, 0)
+  }
+  return 0
+})
 const addonsPrice = computed(() =>
   selectedAddons.value.reduce((sum, addon) => sum + addon.price * addon.quantity, 0)
 )
@@ -127,7 +139,9 @@ function updateAddonSize(addonId, size) {
   addonSelectionState[addonId].size = size
 }
 
-const totalPrice = computed(() => ticketPrice.value + addonsPrice.value)
+const totalPrice = computed(() =>
+  Math.max(ticketPrice.value + addonsPrice.value - workshopVipDiscount.value, 0)
+)
 
 export function useRegistrationWizard() {
   return {
@@ -149,6 +163,7 @@ export function useRegistrationWizard() {
     addonsByCategory,
     addonSelectionState,
     selectedAddons,
+    workshopVipDiscount,
     toggleAddon,
     increaseAddonQuantity,
     decreaseAddonQuantity,
