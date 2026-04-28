@@ -86,7 +86,6 @@ const addonsByCategory = computed(() => {
   })
   return grouped
 })
-const addonCategories = computed(() => Object.keys(addonsByCategory.value ?? {}))
 
 function toggleAddon(addonId) {
   if (selectedAddons[addonId].quantity > 0) {
@@ -134,7 +133,6 @@ export function useRegistrationWizard() {
     selectedSessionDateRanges,
     /** addons selection */
     addonsByCategory,
-    addonCategories,
     selectedAddons,
     toggleAddon,
     increaseAddonQuantity,

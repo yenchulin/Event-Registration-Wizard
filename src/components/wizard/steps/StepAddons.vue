@@ -6,15 +6,10 @@ import ButtonToggle from '@/components/wizard/ButtonToggle.vue'
 import { useRegistrationWizard } from '@/composables/useRegistrationWizard'
 import AddonCard from '@/components/wizard/AddonCard.vue'
 import MerchandiseAddonCard from '@/components/wizard/MerchandiseAddonCard.vue'
+import { CATEGORIES } from '@/utils/enums'
 
-const categoryLabelMap = {
-  workshop: 'Workshops',
-  meal: 'Meal Packages',
-  merchandise: 'Merchandise',
-}
-
+const categoryTabs = Object.values(CATEGORIES)
 const {
-  addonCategories,
   addonsByCategory,
   selectedAddons,
   toggleAddon,
@@ -27,18 +22,14 @@ const {
   totalPrice,
 } = useRegistrationWizard()
 
-const selectedAddon = ref(Object.keys(categoryLabelMap)[0])
+const selectedCategory = ref(CATEGORIES.workshop.id)
 
-const addonTabs = computed(() =>
-  addonCategories.value.map((category) => ({
-    id: category,
-    label: categoryLabelMap[category] ?? category,
-  }))
+const addonsForSelectedCategory = computed(
+  () => addonsByCategory.value[selectedCategory.value] ?? []
 )
-const addonsForSelectedCategory = computed(() => addonsByCategory.value[selectedAddon.value] ?? [])
 
-function selectAddon(addonId) {
-  selectedAddon.value = addonId
+function selectCategory(categoryId) {
+  selectedCategory.value = categoryId
 }
 
 function hasTimeConflict(addon) {
@@ -58,7 +49,7 @@ function hasTimeConflict(addon) {
     <div class="grid col-span-7 gap-6">
       <span class="text-h3 text-neutral">Select Add-ons</span>
 
-      <button-toggle :items="addonTabs" :selected="selectedAddon" @select="selectAddon" />
+      <button-toggle :items="categoryTabs" :selected="selectedCategory" @select="selectCategory" />
 
       <div v-for="addon in addonsForSelectedCategory" :key="addon.id">
         <merchandise-addon-card
