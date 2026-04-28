@@ -18,7 +18,7 @@ const SessionTrack = {
 
 const trackLabel = computed(() => (session.track ?? '').toUpperCase())
 const timeRange = computed(
-  () => `${moment(session.date).format('h:mm A')} - ${moment(session.endDate).format('hh:mm A')}`
+  () => `${moment(session.date).format('h:mm A')} - ${moment(session.endDate).format('h:mm A')}`
 )
 const remainingSpots = computed(() => Math.max(session.capacity - session.registered, 0))
 const capacityRatio = computed(() => {
@@ -149,7 +149,7 @@ function handleToggle(event) {
         >Sold Out</span
       >
       <span class="text-body-xs-regular" :class="progressBarTextClass" v-else
-        >{{ remainingSpots }} spots left</span
+        >{{ remainingSpots }} {{ `${remainingSpots <= 1 ? 'spot' : 'spots'}` }} left</span
       >
     </div>
   </button>

@@ -29,11 +29,9 @@ function selectDate(dateId) {
 
     <button-toggle :items="dateTabs" :selected="selectedDate" @select="selectDate" />
 
-    <span class="text-body-sm-medium text-brand-emphasis"
-      >{{
-        `${selectedSessionCount} ${selectedSessionCount <= 1 ? 'session' : 'sessions'}`
-      }}
-      selected</span
+    <span class="text-body-sm-medium text-brand-emphasis">
+      {{ selectedSessionCount }}
+      {{ selectedSessionCount <= 1 ? 'session' : 'sessions' }} selected</span
     >
 
     <div class="grid grid-cols-2 gap-4">
