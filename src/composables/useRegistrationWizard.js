@@ -63,7 +63,7 @@ function toggleSession(sessionId) {
 }
 
 /** addons selection */
-const selectedAddons = reactive(
+const addonSelectionState = reactive(
   Object.fromEntries(
     addons.map((addon) => [
       addon.id,
@@ -86,34 +86,48 @@ const addonsByCategory = computed(() => {
   })
   return grouped
 })
+const selectedAddons = computed(() =>
+  Object.entries(addonSelectionState).reduce((acc, [id, selection]) => {
+    if (selection.quantity > 0) {
+      acc.push({
+        ...addonsById.value[id],
+        ...selection,
+      })
+    }
+    return acc
+  }, [])
+)
+const addonsPrice = computed(() =>
+  selectedAddons.value.reduce((sum, addon) => sum + addon.price * addon.quantity, 0)
+)
 
 function toggleAddon(addonId) {
-  if (selectedAddons[addonId].quantity > 0) {
-    selectedAddons[addonId].quantity = 0
+  if (addonSelectionState[addonId].quantity > 0) {
+    addonSelectionState[addonId].quantity = 0
   } else {
-    selectedAddons[addonId].quantity = 1
+    addonSelectionState[addonId].quantity = 1
   }
 }
 
 function increaseAddonQuantity(addonId) {
   const addon = addonsById.value[addonId]
-  if (!addon || (addon.maxQuantity ?? 1) <= selectedAddons[addonId].quantity) return
-  selectedAddons[addonId].quantity += 1
+  if (!addon || (addon.maxQuantity ?? 1) <= addonSelectionState[addonId].quantity) return
+  addonSelectionState[addonId].quantity += 1
 }
 
 function decreaseAddonQuantity(addonId) {
   const addon = addonsById.value[addonId]
-  if (!addon || selectedAddons[addonId].quantity <= 0) return
-  selectedAddons[addonId].quantity -= 1
+  if (!addon || addonSelectionState[addonId].quantity <= 0) return
+  addonSelectionState[addonId].quantity -= 1
 }
 
 function updateAddonSize(addonId, size) {
   const addon = addonsById.value[addonId]
   if (!addon || !addon.sizes?.includes(size)) return
-  selectedAddons[addonId].size = size
+  addonSelectionState[addonId].size = size
 }
 
-const totalPrice = computed(() => ticketPrice.value)
+const totalPrice = computed(() => ticketPrice.value + addonsPrice.value)
 
 export function useRegistrationWizard() {
   return {
@@ -133,6 +147,7 @@ export function useRegistrationWizard() {
     selectedSessionDateRanges,
     /** addons selection */
     addonsByCategory,
+    addonSelectionState,
     selectedAddons,
     toggleAddon,
     increaseAddonQuantity,

@@ -6,11 +6,12 @@ import ButtonToggle from '@/components/wizard/ButtonToggle.vue'
 import { useRegistrationWizard } from '@/composables/useRegistrationWizard'
 import AddonCard from '@/components/wizard/AddonCard.vue'
 import MerchandiseAddonCard from '@/components/wizard/MerchandiseAddonCard.vue'
-import { CATEGORIES } from '@/utils/enums'
+import { CATEGORIES } from '@/utils/constants'
 
 const categoryTabs = Object.values(CATEGORIES)
 const {
   addonsByCategory,
+  addonSelectionState,
   selectedAddons,
   toggleAddon,
   increaseAddonQuantity,
@@ -53,9 +54,9 @@ function hasTimeConflict(addon) {
 
       <div v-for="addon in addonsForSelectedCategory" :key="addon.id">
         <merchandise-addon-card
-          v-if="addon.category === 'merchandise'"
+          v-if="addon.category === CATEGORIES.merchandise.id"
           :addon="addon"
-          :selectedOption="selectedAddons[addon.id]"
+          :selectedOption="addonSelectionState[addon.id]"
           @selectSize="updateAddonSize"
           @addQuantity="increaseAddonQuantity"
           @removeQuantity="decreaseAddonQuantity"
@@ -63,7 +64,7 @@ function hasTimeConflict(addon) {
         <addon-card
           v-else
           :addon="addon"
-          :selected="selectedAddons[addon.id].quantity > 0"
+          :selected="addonSelectionState[addon.id].quantity > 0"
           :hasTimeConflict="hasTimeConflict(addon)"
           @toggle="toggleAddon"
         />
@@ -81,6 +82,20 @@ function hasTimeConflict(addon) {
         </span>
         <span class="text-body-sm-regular text-neutral-muted">{{
           formatCurrency(ticketPrice)
+        }}</span>
+      </div>
+
+      <div
+        v-for="addon in selectedAddons"
+        :key="addon.id"
+        class="flex justify-between items-center"
+      >
+        <span class="text-body-sm-regular text-neutral-muted"
+          >{{ addon.name
+          }}{{ addon.category === CATEGORIES.merchandise.id ? ` × ${addon.quantity}` : '' }}</span
+        >
+        <span class="text-body-sm-regular text-neutral-muted">{{
+          formatCurrency(addon.price * addon.quantity)
         }}</span>
       </div>
 
