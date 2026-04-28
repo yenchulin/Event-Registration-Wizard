@@ -2,7 +2,7 @@
 import moment from 'moment'
 import { computed } from 'vue'
 
-const props = defineProps({
+const { session, selected } = defineProps({
   session: { type: Object, required: true },
   selected: { type: Boolean, default: false },
 })
@@ -16,26 +16,23 @@ const SessionTrack = {
   main: 'main',
 }
 
-const trackLabel = computed(() => (props.session.track ?? '').toUpperCase())
+const trackLabel = computed(() => (session.track ?? '').toUpperCase())
 const timeRange = computed(
-  () =>
-    `${moment(props.session.date).format('hh:mm A')} - ${moment(props.session.endDate).format('hh:mm A')}`
+  () => `${moment(session.date).format('h:mm A')} - ${moment(session.endDate).format('hh:mm A')}`
 )
-const remainingSpots = computed(() =>
-  Math.max(props.session.capacity - props.session.registered, 0)
-)
+const remainingSpots = computed(() => Math.max(session.capacity - session.registered, 0))
 const capacityRatio = computed(() => {
-  const cap = Math.max(props.session.capacity, 0)
+  const cap = Math.max(session.capacity, 0)
   if (cap <= 0) {
     return 0
   }
-  return Math.min(1, props.session.registered / cap)
+  return Math.min(1, session.registered / cap)
 })
 
 const cardClass = computed(() => {
   if (remainingSpots.value === 0) {
     return 'border-neutral-muted bg-surface-l2'
-  } else if (props.selected) {
+  } else if (selected) {
     return 'border-brand-emphasis bg-brand-muted-rest cursor-pointer'
   } else {
     return 'border-neutral-muted bg-surface-l0 cursor-pointer'
@@ -43,7 +40,7 @@ const cardClass = computed(() => {
 })
 
 const badgeClass = computed(() => {
-  switch (props.session.track) {
+  switch (session.track) {
     case SessionTrack.frontend:
       return 'bg-warning-muted-rest'
     case SessionTrack.backend:
@@ -57,7 +54,7 @@ const badgeClass = computed(() => {
 })
 
 const badgeTextClass = computed(() => {
-  switch (props.session.track) {
+  switch (session.track) {
     case SessionTrack.frontend:
       return 'text-warning-emphasis'
     case SessionTrack.backend:
@@ -95,7 +92,8 @@ const progressBarTextClass = computed(() => {
 })
 
 function handleToggle(event) {
-  emit('toggle', props.session.id, event)
+  if (remainingSpots.value === 0) return
+  emit('toggle', session.id, event)
 }
 </script>
 
@@ -103,7 +101,7 @@ function handleToggle(event) {
   <button
     type="button"
     :class="cardClass"
-    class="text-left p-4 rounded-[6px] border-2 border-solid transition-colors"
+    class="text-left p-4 rounded-md border-2 border-solid transition-colors"
     @click="handleToggle"
   >
     <div class="flex flex-col gap-2">
