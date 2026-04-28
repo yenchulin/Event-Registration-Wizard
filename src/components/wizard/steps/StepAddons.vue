@@ -1,5 +1,6 @@
 <script setup>
 import { computed, ref } from 'vue'
+import moment from 'moment'
 import { formatCurrency } from '@/utils'
 import ButtonToggle from '@/components/wizard/ButtonToggle.vue'
 import { useRegistrationWizard } from '@/composables/useRegistrationWizard'
@@ -33,6 +34,17 @@ const addonsForSelectedCategory = computed(() => addonsByCategory.value[selected
 function selectAddon(addonId) {
   selectedAddon.value = addonId
 }
+
+function hasTimeConflict(addon) {
+  if (!addon.date || !addon.endDate) return false
+  return selectedSessionDateRanges.value.some(
+    (dateRange) =>
+      moment(addon.date).isBetween(dateRange.date, dateRange.endDate, undefined, '[)') ||
+      moment(addon.endDate).isBetween(dateRange.date, dateRange.endDate, undefined, '(]') ||
+      dateRange.date.isBetween(moment(addon.date), moment(addon.endDate), undefined, '[)') ||
+      dateRange.endDate.isBetween(moment(addon.date), moment(addon.endDate), undefined, '(]')
+  )
+}
 </script>
 
 <template>
@@ -47,6 +59,7 @@ function selectAddon(addonId) {
         :key="addon.id"
         :addon="addon"
         :selected="selectedAddonIds.has(addon.id)"
+        :unavailable="hasTimeConflict(addon)"
         @toggle="toggleAddon"
       />
     <div
