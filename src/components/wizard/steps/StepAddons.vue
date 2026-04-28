@@ -3,6 +3,7 @@ import { computed, ref } from 'vue'
 import { formatCurrency } from '@/utils'
 import ButtonToggle from '@/components/wizard/ButtonToggle.vue'
 import { useRegistrationWizard } from '@/composables/useRegistrationWizard'
+import AddonCard from '@/components/wizard/AddonCard.vue'
 
 const categoryLabelMap = {
   workshop: 'Workshops',
@@ -12,6 +13,8 @@ const categoryLabelMap = {
 
 const {
   addonCategories,
+  addonsByCategory,
+  selectedAddonIds,
   selectedTicket,
   ticketPrice,
   totalPrice,
@@ -25,6 +28,7 @@ const addonTabs = computed(() =>
     label: categoryLabelMap[category] ?? category,
   }))
 )
+const addonsForSelectedCategory = computed(() => addonsByCategory.value[selectedAddon.value] ?? [])
 
 function selectAddon(addonId) {
   selectedAddon.value = addonId
@@ -38,6 +42,13 @@ function selectAddon(addonId) {
 
       <button-toggle :items="addonTabs" :selected="selectedAddon" @select="selectAddon" />
 
+      <addon-card
+        v-for="addon in addonsForSelectedCategory"
+        :key="addon.id"
+        :addon="addon"
+        :selected="selectedAddonIds.has(addon.id)"
+        @toggle="toggleAddon"
+      />
     <div
       class="grid col-span-3 gap-4 h-fit rounded-md border border-solid border-neutral-muted bg-surface-l1 p-6"
     >

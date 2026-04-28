@@ -54,6 +54,7 @@ function toggleSession(sessionId) {
 }
 
 /** addons selection */
+const selectedAddonIds = ref(new Set([]))
 const addonsByCategory = computed(() => {
   const grouped = {}
   addons.forEach((a) => {
@@ -67,6 +68,13 @@ const addonsByCategory = computed(() => {
 })
 const addonCategories = computed(() => Object.keys(addonsByCategory.value ?? {}))
 
+function toggleAddon(addonId) {
+  if (selectedAddonIds.value.has(addonId)) {
+    selectedAddonIds.value.delete(addonId)
+  } else {
+    selectedAddonIds.value.add(addonId)
+  }
+}
 const totalPrice = computed(() => ticketPrice.value)
 
 export function useRegistrationWizard() {
@@ -87,6 +95,8 @@ export function useRegistrationWizard() {
     /** addons selection */
     addonsByCategory,
     addonCategories,
+    selectedAddonIds,
+    toggleAddon,
     totalPrice,
   }
 }
