@@ -59,7 +59,7 @@ function hasTimeConflict(addon) {
         :key="addon.id"
         :addon="addon"
         :selected="selectedAddonIds.has(addon.id)"
-        :unavailable="hasTimeConflict(addon)"
+        :hasTimeConflict="hasTimeConflict(addon)"
         @toggle="toggleAddon"
       />
     <div

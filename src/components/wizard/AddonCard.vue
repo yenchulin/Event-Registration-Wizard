@@ -3,10 +3,10 @@ import { computed } from 'vue'
 import { formatCurrency } from '@/utils'
 import moment from 'moment'
 
-const { addon, selected, unavailable } = defineProps({
+const { addon, selected, hasTimeConflict } = defineProps({
   addon: { type: Object, required: true },
   selected: { type: Boolean, default: false },
-  unavailable: { type: Boolean, default: false },
+  hasTimeConflict: { type: Boolean, default: false },
 })
 
 const emit = defineEmits(['toggle'])
@@ -17,7 +17,7 @@ const timeRange = computed(
 const remainingSpots = computed(() => Math.max(addon.capacity - addon.registered, 0))
 
 const cardClass = computed(() => {
-  if (unavailable || remainingSpots.value === 0) {
+  if (hasTimeConflict || remainingSpots.value === 0) {
     return 'border-neutral-muted bg-surface-l2'
   } else if (selected) {
     return 'border-brand-emphasis bg-brand-muted-rest cursor-pointer'
@@ -27,7 +27,7 @@ const cardClass = computed(() => {
 })
 
 function handleToggle(event) {
-  if (unavailable || remainingSpots.value === 0) return
+  if (hasTimeConflict || remainingSpots.value === 0) return
   emit('toggle', addon.id, event)
 }
 </script>
