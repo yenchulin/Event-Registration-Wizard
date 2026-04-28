@@ -1,20 +1,21 @@
 import { ref } from 'vue'
+import { WIZARD_STEP_KEYS } from '@/utils/constants'
 
-const currentStep = ref(1)
+const currentStep = ref(WIZARD_STEP_KEYS.attendeeInfo.id)
 
-export function useWizardSteps(totalSteps) {
-  function goToStep(stepNumber) {
-    currentStep.value = Math.min(Math.max(stepNumber, 1), totalSteps)
-  }
+function goToStep(stepNumber) {
+  currentStep.value = Math.min(Math.max(stepNumber, 1), Object.keys(WIZARD_STEP_KEYS).length)
+}
 
-  function goNext() {
-    goToStep(currentStep.value + 1)
-  }
+function goNext() {
+  goToStep(currentStep.value + 1)
+}
 
-  function goBack() {
-    goToStep(currentStep.value - 1)
-  }
+function goBack() {
+  goToStep(currentStep.value - 1)
+}
 
+export function useWizardSteps() {
   return {
     currentStep,
     goToStep,

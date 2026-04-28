@@ -6,37 +6,37 @@ import StepAddons from '@/components/wizard/steps/StepAddons.vue'
 import Logo from '@/assets/icons/Logo.svg'
 import BaseButton from '@/components/wizard/BaseButton.vue'
 import { useWizardSteps } from '@/composables/useWizardSteps'
+import { WIZARD_STEP_KEYS } from '@/utils/constants'
 
-const actionType = Object.freeze({
+const actionType = {
   next: 0,
   submit: 1,
-})
-
+}
 const wizardSteps = [
   {
-    id: 1,
-    title: 'Attendee Info',
+    id: WIZARD_STEP_KEYS.attendeeInfo.id,
+    title: WIZARD_STEP_KEYS.attendeeInfo.label,
     component: StepAttendeeInfo,
     action: { type: actionType.next, label: 'Next: Sessions' },
     hasBack: false,
   },
   {
-    id: 2,
-    title: 'Sessions',
+    id: WIZARD_STEP_KEYS.sessions.id,
+    title: WIZARD_STEP_KEYS.sessions.label,
     component: StepSessionSelection,
     action: { type: actionType.next, label: 'Next: Add-ons' },
     hasBack: true,
   },
   {
-    id: 3,
-    title: 'Add-ons',
+    id: WIZARD_STEP_KEYS.addons.id,
+    title: WIZARD_STEP_KEYS.addons.label,
     component: StepAddons,
     action: { type: actionType.next, label: 'Next: Review' },
     hasBack: true,
   },
   {
-    id: 4,
-    title: 'Review',
+    id: WIZARD_STEP_KEYS.review.id,
+    title: WIZARD_STEP_KEYS.review.label,
     component: StepReviewSubmit,
     action: { type: actionType.submit, label: 'Submit Registration' },
     hasBack: true,
