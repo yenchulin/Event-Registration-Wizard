@@ -63,7 +63,18 @@ function toggleSession(sessionId) {
 }
 
 /** addons selection */
-const selectedAddonIds = ref(new Set([]))
+const selectedAddons = reactive(
+  Object.fromEntries(
+    addons.map((addon) => [
+      addon.id,
+      {
+        quantity: 0,
+        size: addon.sizes?.[0] ?? '',
+      },
+    ])
+  )
+)
+const addonsById = computed(() => Object.fromEntries(addons.map((a) => [a.id, a])))
 const addonsByCategory = computed(() => {
   const grouped = {}
   addons.forEach((a) => {
@@ -78,12 +89,31 @@ const addonsByCategory = computed(() => {
 const addonCategories = computed(() => Object.keys(addonsByCategory.value ?? {}))
 
 function toggleAddon(addonId) {
-  if (selectedAddonIds.value.has(addonId)) {
-    selectedAddonIds.value.delete(addonId)
+  if (selectedAddons[addonId].quantity > 0) {
+    selectedAddons[addonId].quantity = 0
   } else {
-    selectedAddonIds.value.add(addonId)
+    selectedAddons[addonId].quantity = 1
   }
 }
+
+function increaseAddonQuantity(addonId) {
+  const addon = addonsById.value[addonId]
+  if (!addon || (addon.maxQuantity ?? 1) <= selectedAddons[addonId].quantity) return
+  selectedAddons[addonId].quantity += 1
+}
+
+function decreaseAddonQuantity(addonId) {
+  const addon = addonsById.value[addonId]
+  if (!addon || selectedAddons[addonId].quantity <= 0) return
+  selectedAddons[addonId].quantity -= 1
+}
+
+function updateAddonSize(addonId, size) {
+  const addon = addonsById.value[addonId]
+  if (!addon || !addon.sizes?.includes(size)) return
+  selectedAddons[addonId].size = size
+}
+
 const totalPrice = computed(() => ticketPrice.value)
 
 export function useRegistrationWizard() {
@@ -105,8 +135,11 @@ export function useRegistrationWizard() {
     /** addons selection */
     addonsByCategory,
     addonCategories,
-    selectedAddonIds,
+    selectedAddons,
     toggleAddon,
+    increaseAddonQuantity,
+    decreaseAddonQuantity,
+    updateAddonSize,
     totalPrice,
   }
 }

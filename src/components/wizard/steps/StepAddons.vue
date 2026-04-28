@@ -5,6 +5,7 @@ import { formatCurrency } from '@/utils'
 import ButtonToggle from '@/components/wizard/ButtonToggle.vue'
 import { useRegistrationWizard } from '@/composables/useRegistrationWizard'
 import AddonCard from '@/components/wizard/AddonCard.vue'
+import MerchandiseAddonCard from '@/components/wizard/MerchandiseAddonCard.vue'
 
 const categoryLabelMap = {
   workshop: 'Workshops',
@@ -15,7 +16,12 @@ const categoryLabelMap = {
 const {
   addonCategories,
   addonsByCategory,
-  selectedAddonIds,
+  selectedAddons,
+  toggleAddon,
+  increaseAddonQuantity,
+  decreaseAddonQuantity,
+  updateAddonSize,
+  selectedSessionDateRanges,
   selectedTicket,
   ticketPrice,
   totalPrice,
@@ -54,14 +60,25 @@ function hasTimeConflict(addon) {
 
       <button-toggle :items="addonTabs" :selected="selectedAddon" @select="selectAddon" />
 
-      <addon-card
-        v-for="addon in addonsForSelectedCategory"
-        :key="addon.id"
-        :addon="addon"
-        :selected="selectedAddonIds.has(addon.id)"
-        :hasTimeConflict="hasTimeConflict(addon)"
-        @toggle="toggleAddon"
-      />
+      <div v-for="addon in addonsForSelectedCategory" :key="addon.id">
+        <merchandise-addon-card
+          v-if="addon.category === 'merchandise'"
+          :addon="addon"
+          :selectedOption="selectedAddons[addon.id]"
+          @selectSize="updateAddonSize"
+          @addQuantity="increaseAddonQuantity"
+          @removeQuantity="decreaseAddonQuantity"
+        />
+        <addon-card
+          v-else
+          :addon="addon"
+          :selected="selectedAddons[addon.id].quantity > 0"
+          :hasTimeConflict="hasTimeConflict(addon)"
+          @toggle="toggleAddon"
+        />
+      </div>
+    </div>
+
     <div
       class="grid col-span-3 gap-4 h-fit rounded-md border border-solid border-neutral-muted bg-surface-l1 p-6"
     >

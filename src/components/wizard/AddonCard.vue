@@ -35,7 +35,7 @@ function handleToggle(event) {
 <template>
   <button
     type="button"
-    class="flex flex-col gap-2 text-left p-4 rounded-md border-2 border-solid transition-colors"
+    class="w-full flex flex-col gap-2 text-left p-4 rounded-md border-2 border-solid transition-colors"
     :class="cardClass"
     @click="handleToggle"
   >
