@@ -4,6 +4,7 @@ import { sessions } from '@/mocks/sessions'
 import { addons } from '@/mocks/addons'
 import moment from 'moment'
 
+/** attendee info */
 const attendee = reactive({
   fullName: '',
   email: '',
@@ -13,15 +14,24 @@ const attendee = reactive({
   shippingAddress: '',
 })
 
+/** ticket selection */
 const selectedTicketTypeId = ref(event.ticketTypes[0]?.id ?? '')
-const ticketTypes = computed(() => event.ticketTypes)
+const ticketTypes = computed(() => event.ticketTypes ?? [])
+const selectedTicket = computed(() =>
+  ticketTypes.value.find((ticket) => ticket.id === selectedTicketTypeId.value)
+)
+const ticketPrice = computed(() => selectedTicket.value?.price ?? 0)
 
 function selectTicketType(ticketTypeId) {
   selectedTicketTypeId.value = ticketTypeId
 }
 
+/** session selection */
 const selectedSessionIds = ref(new Set([]))
 const eventDates = computed(() => event.dates ?? [])
+const sessionsById = computed(() =>
+  Object.fromEntries(sessions.map((session) => [session.id, session]))
+)
 const sessionsByDay = computed(() => {
   const grouped = {}
   sessions.forEach((s) => {
@@ -43,6 +53,7 @@ function toggleSession(sessionId) {
   }
 }
 
+/** addons selection */
 const addonsByCategory = computed(() => {
   const grouped = {}
   addons.forEach((a) => {
@@ -56,17 +67,26 @@ const addonsByCategory = computed(() => {
 })
 const addonCategories = computed(() => Object.keys(addonsByCategory.value ?? {}))
 
+const totalPrice = computed(() => ticketPrice.value)
+
 export function useRegistrationWizard() {
   return {
+    /** attendee info */
     attendee,
+    /** ticket selection */
     ticketTypes,
     selectedTicketTypeId,
+    selectedTicket,
+    ticketPrice,
     selectTicketType,
+    /** session selection */
     selectedSessionIds,
     eventDates,
     sessionsByDay,
     toggleSession,
+    /** addons selection */
     addonsByCategory,
     addonCategories,
+    totalPrice,
   }
 }
