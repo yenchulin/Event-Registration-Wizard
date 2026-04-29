@@ -71,14 +71,16 @@ const sessionsById = computed(() =>
 )
 const sessionsByDay = computed(() => {
   const grouped = {}
-  sessions.forEach((s) => {
-    const dayKey = moment(s.date).format('YYYY-MM-DD')
-    if (grouped[dayKey]) {
-      grouped[dayKey].push(s)
-    } else {
-      grouped[dayKey] = [s]
-    }
-  })
+  sessions
+    .toSorted((a, b) => moment(a.date).diff(moment(b.date)))
+    .forEach((s) => {
+      const dayKey = moment(s.date).format('YYYY-MM-DD')
+      if (grouped[dayKey]) {
+        grouped[dayKey].push(s)
+      } else {
+        grouped[dayKey] = [s]
+      }
+    })
   return grouped
 })
 const selectedSessionDateRanges = computed(() => {
