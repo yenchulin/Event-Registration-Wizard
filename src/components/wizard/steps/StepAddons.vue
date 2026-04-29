@@ -14,6 +14,7 @@ const {
   addonSelectionState,
   selectedAddons,
   workshopVipDiscount,
+  isShippingRequired,
   toggleAddon,
   increaseAddonQuantity,
   decreaseAddonQuantity,
@@ -54,7 +55,7 @@ function hasTimeConflict(addon) {
       <button-toggle :items="categoryTabs" :selected="selectedCategory" @select="selectCategory" />
 
       <div
-        v-if="selectedAddons.some((addon) => addon.category === CATEGORIES.merchandise.id)"
+        v-if="isShippingRequired"
         class="flex gap-3 p-4 rounded-lg border border-solid border-info-opacity bg-info-subtle-rest"
       >
         <q-icon name="info" class="text-info font-size-lg" />

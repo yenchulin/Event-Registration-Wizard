@@ -114,6 +114,9 @@ const workshopVipDiscount = computed(() => {
   }
   return 0
 })
+const isShippingRequired = computed(() =>
+  selectedAddons.value.some((addon) => addon.category === CATEGORIES.merchandise.id)
+)
 const addonsPrice = computed(() =>
   selectedAddons.value.reduce((sum, addon) => sum + addon.price * addon.quantity, 0)
 )
@@ -170,6 +173,7 @@ export function useRegistrationWizard() {
     addonSelectionState,
     selectedAddons,
     workshopVipDiscount,
+    isShippingRequired,
     toggleAddon,
     increaseAddonQuantity,
     decreaseAddonQuantity,
