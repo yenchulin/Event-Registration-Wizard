@@ -15,8 +15,6 @@ Given the requirement for cross-step validation, shared state, and flexible navi
 - Centralize shared state in a global composable
 - Keep UI-specific state close to components
 
----
-
 ## 2. Key Decisions
 
 ### Why not use router-based steps?
@@ -179,6 +177,8 @@ Extracted reusable components to keep maintainability:
   Created a separate success page instead of staying in the wizard stepper because:
   - Does not share the stepper
   - Refreshing the success page should not navigate to wizard step 1
+
+---
 
 ### Submission Flow
 
