@@ -2,7 +2,14 @@
 import { useRegistrationWizard } from '@/composables/useRegistrationWizard'
 import InputField from '@/components/wizard/InputField.vue'
 
-const { attendee, ticketTypes, selectedTicketTypeId, selectTicketType } = useRegistrationWizard()
+const {
+  attendee,
+  attendeeErrorMsgs,
+  isShippingRequired,
+  ticketTypes,
+  selectedTicketTypeId,
+  selectTicketType,
+} = useRegistrationWizard()
 </script>
 
 <template>
@@ -51,36 +58,42 @@ const { attendee, ticketTypes, selectedTicketTypeId, selectTicketType } = useReg
         <div class="grid grid-cols-2 gap-4">
           <input-field
             v-model="attendee.fullName"
-            label="Full Name"
+            label="Full Name *"
             placeholder="Enter your full name"
+            :error="attendeeErrorMsgs.fullName"
           />
           <input-field
             v-model="attendee.email"
-            label="Email"
+            label="Email *"
             placeholder="Enter your email"
             type="email"
+            :error="attendeeErrorMsgs.email"
           />
           <input-field
             v-model="attendee.phone"
-            label="Phone"
+            label="Phone *"
             placeholder="Enter your phone number"
             type="tel"
+            :error="attendeeErrorMsgs.phone"
           />
           <input-field
             v-model="attendee.company"
-            label="Company"
+            label="Company *"
             placeholder="Enter your company"
+            :error="attendeeErrorMsgs.company"
           />
         </div>
         <input-field
           v-model="attendee.jobTitle"
-          label="Job Title"
+          label="Job Title *"
           placeholder="Enter your job title"
+          :error="attendeeErrorMsgs.jobTitle"
         />
         <input-field
           v-model="attendee.shippingAddress"
-          label="Shipping Address (Optional)"
+          :label="isShippingRequired ? 'Shipping Address *' : 'Shipping Address (Optional)'"
           placeholder="Enter your shipping address"
+          :error="attendeeErrorMsgs.shippingAddress"
         />
       </div>
     </div>
