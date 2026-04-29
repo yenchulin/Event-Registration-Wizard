@@ -45,17 +45,22 @@ const wizardSteps = [
 ]
 
 const { currentStep, goBack, goNext } = useWizardSteps()
-const { isAttendeeValid, validateAttendee } = useRegistrationWizard()
+const { isAttendeeValid, isSelectedSessionsValid, validateAttendee, validateSelectedSessions } =
+  useRegistrationWizard()
 
 function isStepError(stepId) {
   if (stepId == WIZARD_STEP_KEYS.attendeeInfo.id) {
     return !isAttendeeValid.value
+  }
+  if (stepId == WIZARD_STEP_KEYS.sessions.id) {
+    return !isSelectedSessionsValid.value
   }
   return false
 }
 
 function handleSubmitRegistration() {
   validateAttendee()
+  validateSelectedSessions()
 }
 </script>
 

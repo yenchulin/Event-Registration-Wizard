@@ -64,6 +64,7 @@ function selectTicketType(ticketTypeId) {
 
 /** session selection */
 const selectedSessionIds = ref(new Set([]))
+const selectedSessionErrorMsg = ref('')
 const eventDates = computed(() => event.dates ?? [])
 const sessionsById = computed(() =>
   Object.fromEntries(sessions.map((session) => [session.id, session]))
@@ -94,6 +95,7 @@ const selectedSessions = computed(() => {
     return sessionsById.value[sessionId]
   })
 })
+const isSelectedSessionsValid = computed(() => selectedSessionErrorMsg.value === '')
 
 function toggleSession(sessionId) {
   if (selectedSessionIds.value.has(sessionId)) {
@@ -101,6 +103,19 @@ function toggleSession(sessionId) {
   } else {
     selectedSessionIds.value.add(sessionId)
   }
+}
+
+function validateSelectedSessions() {
+  const sortedDateRanges = selectedSessionDateRanges.value.toSorted((a, b) => a.date.diff(b.date))
+  for (let i = 0; i < sortedDateRanges.length - 1; i++) {
+    const current = sortedDateRanges[i]
+    const next = sortedDateRanges[i + 1]
+    if (current.endDate.isAfter(next.date)) {
+      selectedSessionErrorMsg.value = 'Selected sessions have time conflicts'
+      return
+    }
+  }
+  selectedSessionErrorMsg.value = ''
 }
 
 /** addons selection */
@@ -201,11 +216,14 @@ export function useRegistrationWizard() {
     selectTicketType,
     /** session selection */
     selectedSessionIds,
+    selectedSessionErrorMsg,
     eventDates,
     sessionsByDay,
     selectedSessions,
-    toggleSession,
     selectedSessionDateRanges,
+    isSelectedSessionsValid,
+    toggleSession,
+    validateSelectedSessions,
     /** addons selection */
     addonsByCategory,
     addonSelectionState,

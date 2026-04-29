@@ -13,6 +13,8 @@ const {
   isAttendeeValid,
   selectedTicket,
   selectedSessions,
+  selectedSessionErrorMsg,
+  isSelectedSessionsValid,
   selectedAddons,
   workshopVipDiscount,
   isShippingRequired,
@@ -40,7 +42,7 @@ const sessionSortByDate = computed(() => {
     <span class="text-h3 text-neutral">Review Your Registration</span>
 
     <div
-      v-if="!isAttendeeValid"
+      v-if="!isAttendeeValid || !isSelectedSessionsValid"
       class="flex flex-col grid gap-2 p-4 border border-solid border-danger-muted rounded-md bg-danger-muted-rest"
     >
       <span class="text-body-sm-medium text-danger"
@@ -51,6 +53,10 @@ const sessionSortByDate = computed(() => {
         :key="error.key"
         class="text-body-sm-regular text-danger"
         >• Step 1: {{ error.required || error.format }}</span
+      >
+
+      <span v-if="selectedSessionErrorMsg" class="text-body-sm-regular text-danger"
+        >• Step 2: {{ selectedSessionErrorMsg }}</span
       >
     </div>
 
@@ -123,7 +129,11 @@ const sessionSortByDate = computed(() => {
       </div>
     </review-block>
 
-    <review-block title="Selected Sessions" :step-id="WIZARD_STEP_KEYS.sessions.id">
+    <review-block
+      title="Selected Sessions"
+      :step-id="WIZARD_STEP_KEYS.sessions.id"
+      :is-invalid="!isSelectedSessionsValid"
+    >
       <div
         v-for="session in sessionSortByDate"
         :key="session.id"
