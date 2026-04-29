@@ -24,6 +24,11 @@ export default [
           }
         },
       },
+      {
+        path: ':catchAll(.*)*',
+        name: 'error',
+        component: () => import('../pages/ErrorPage.vue'),
+      },
     ],
   },
 ]
