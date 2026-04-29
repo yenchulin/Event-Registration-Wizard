@@ -25,7 +25,7 @@ function goHome() {
 </script>
 
 <template>
-  <q-page class="flex items-center justify-center" style="min-height: calc(100vh - 80px)">
+  <q-page class="flex items-center justify-center">
     <section class="flex flex-col items-center max-w-[560px] gap-4 text-center">
       <div class="h-20 w-20 rounded-full bg-success-emphasis-rest flex items-center justify-center">
         <q-icon name="check" class="text-inverse text-5xl" />
