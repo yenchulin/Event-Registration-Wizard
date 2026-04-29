@@ -33,7 +33,9 @@ function goHome() {
 
       <span class="text-h2 text-success">Registration Complete!</span>
 
-      <span class="text-body-lg-regular text-neutral">Confirmation #{{ confirmationCode }}</span>
+      <span class="text-body-lg-regular text-neutral"
+        >Confirmation #TC2028-{{ confirmationCode }}</span
+      >
 
       <p class="m-0 text-body-sm-regular text-neutral-muted">
         Thank you, {{ attendeeName }}! Your {{ selectedTicketLabel }} registration for WebDev Summit
