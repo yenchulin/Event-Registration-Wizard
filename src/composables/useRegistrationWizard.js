@@ -24,13 +24,9 @@ const attendeeErrorMsgs = reactive({
 })
 
 const isFullNameValid = computed(() => attendee.fullName.trim() !== '')
-const isEmailValid = computed(
-  () => attendeeErrorMsgs.email.required === '' && isEmailFormatValid.value
-)
+const isEmailRequired = computed(() => attendee.email.trim() !== '')
 const isEmailFormatValid = computed(() => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(attendee.email.trim()))
-const isPhoneValid = computed(
-  () => attendeeErrorMsgs.phone.required === '' && isPhoneFormatValid.value
-)
+const isPhoneRequired = computed(() => attendee.phone.trim() !== '')
 const isPhoneFormatValid = computed(() => /^[+\d][\d\s\-()]{6,}$/.test(attendee.phone.trim()))
 const isCompanyValid = computed(() => attendee.company.trim() !== '')
 const isJobTitleValid = computed(() => attendee.jobTitle.trim() !== '')
@@ -43,14 +39,10 @@ const isAttendeeValid = computed(() =>
 
 function validateAttendee() {
   attendeeErrorMsgs.fullName.required = isFullNameValid.value ? '' : 'Full name is required'
-  attendeeErrorMsgs.email.required = isEmailValid.value ? '' : 'Email is required'
-  attendeeErrorMsgs.email.format = isEmailFormatValid.value
-    ? ''
-    : 'Please enter a valid email address'
-  attendeeErrorMsgs.phone.required = isPhoneValid.value ? '' : 'Phone number is required'
-  attendeeErrorMsgs.phone.format = isPhoneFormatValid.value
-    ? ''
-    : 'Please enter a valid phone number'
+  attendeeErrorMsgs.email.required = isEmailRequired.value ? '' : 'Email is required'
+  attendeeErrorMsgs.email.format = isEmailFormatValid.value ? '' : 'Email is invalid'
+  attendeeErrorMsgs.phone.required = isPhoneRequired.value ? '' : 'Phone number is required'
+  attendeeErrorMsgs.phone.format = isPhoneFormatValid.value ? '' : 'Phone number is invalid'
   attendeeErrorMsgs.company.required = isCompanyValid.value ? '' : 'Company is required'
   attendeeErrorMsgs.jobTitle.required = isJobTitleValid.value ? '' : 'Job title is required'
   attendeeErrorMsgs.shippingAddress.required = isShippingAddressValid.value
