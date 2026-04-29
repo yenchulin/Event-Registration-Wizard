@@ -156,7 +156,10 @@ const sessionSortByDate = computed(() => {
           CATEGORIES[addon.category].label
         }}</span>
         <span class="text-body-sm-regular text-neutral"
-          >{{ addon.name }} ({{ formatCurrency(addon.price) }})</span
+          >{{ addon.name
+          }}{{ addon.category === CATEGORIES.merchandise.id ? ` × ${addon.quantity}` : '' }} ({{
+            formatCurrency(addon.price)
+          }})</span
         >
       </div>
     </review-block>
