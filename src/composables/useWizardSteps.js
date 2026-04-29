@@ -15,11 +15,16 @@ function goBack() {
   goToStep(currentStep.value - 1)
 }
 
+function reset() {
+  currentStep.value = WIZARD_STEP_KEYS.attendeeInfo.id
+}
+
 export function useWizardSteps() {
   return {
     currentStep,
     goToStep,
     goNext,
     goBack,
+    reset,
   }
 }

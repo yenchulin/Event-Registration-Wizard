@@ -3,6 +3,7 @@ import { useRouter } from 'vue-router'
 import { useRegistrationWizard } from '@/composables/useRegistrationWizard'
 import { computed } from 'vue'
 import BaseButton from '@/components/wizard/BaseButton.vue'
+import { useWizardSteps } from '@/composables/useWizardSteps'
 
 defineProps({
   confirmationCode: {
@@ -12,6 +13,7 @@ defineProps({
 })
 
 const router = useRouter()
+const { reset } = useWizardSteps()
 const { attendee, selectedTicket, resetWizardState } = useRegistrationWizard()
 
 const attendeeName = computed(() => attendee.fullName?.trim() || 'there')
@@ -19,6 +21,7 @@ const attendeeEmail = computed(() => attendee.email?.trim() || 'your inbox')
 const selectedTicketLabel = computed(() => selectedTicket.value?.name || 'selected')
 
 function goHome() {
+  reset()
   resetWizardState()
   router.push({ name: 'home' })
 }
