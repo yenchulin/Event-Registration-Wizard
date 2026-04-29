@@ -45,7 +45,14 @@ const wizardSteps = [
 ]
 
 const { currentStep, goBack, goNext } = useWizardSteps()
-const { validateAttendee } = useRegistrationWizard()
+const { isAttendeeValid, validateAttendee } = useRegistrationWizard()
+
+function isStepError(stepId) {
+  if (stepId == WIZARD_STEP_KEYS.attendeeInfo.id) {
+    return !isAttendeeValid.value
+  }
+  return false
+}
 
 function handleSubmitRegistration() {
   validateAttendee()
@@ -71,8 +78,10 @@ function handleSubmitRegistration() {
               :name="step.id"
               :title="step.title"
               :prefix="`${step.id}`"
-              :done="currentStep > step.id"
+              :done="currentStep > step.id && !isStepError(step.id)"
+              :error="isStepError(step.id)"
               done-icon="check"
+              error-icon="info"
             >
               <component :is="step.component" />
               <q-stepper-navigation>
