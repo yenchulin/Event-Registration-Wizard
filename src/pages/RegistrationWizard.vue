@@ -8,6 +8,7 @@ import { useWizardSteps } from '@/composables/useWizardSteps'
 import { useRegistrationWizard } from '@/composables/useRegistrationWizard'
 import { WIZARD_STEP_KEYS } from '@/utils/constants'
 import { useRouter } from 'vue-router'
+import { ref } from 'vue'
 
 const actionType = {
   next: 0,
@@ -49,6 +50,9 @@ const { currentStep, goBack, goNext } = useWizardSteps()
 const { isAttendeeValid, isSelectedSessionsValid, isSubmissionLoading, submitRegistration } =
   useRegistrationWizard()
 
+const isSubmitErrorDialogOpen = ref(false)
+const submitErrorMessage = ref('')
+
 function isStepError(stepId) {
   if (stepId == WIZARD_STEP_KEYS.attendeeInfo.id) {
     return !isAttendeeValid.value
@@ -61,13 +65,15 @@ function isStepError(stepId) {
 
 function handleSubmitRegistration() {
   submitRegistration().then((result) => {
+    if (!result) return
     if (result.success) {
       router.push({
         name: 'registration-success',
         params: { confirmationCode: result.confirmationCode },
       })
     } else {
-      console.error(result.error)
+      submitErrorMessage.value = result.error
+      isSubmitErrorDialogOpen.value = true
     }
   })
 }
@@ -107,8 +113,21 @@ function handleSubmitRegistration() {
         </q-stepper-navigation>
       </q-step>
     </q-stepper>
+
     <q-inner-loading :showing="isSubmissionLoading">
       <q-spinner-dots size="50px" color="primary" />
     </q-inner-loading>
+
+    <q-dialog v-model="isSubmitErrorDialogOpen" persistent>
+      <q-card class="w-[420px] max-w-[90vw] rounded-md">
+        <q-card-section class="text-subtitle1 text-danger">Oops!</q-card-section>
+        <q-card-section class="py-0 text-body-sm-regular">
+          {{ submitErrorMessage }}
+        </q-card-section>
+        <q-card-actions align="right">
+          <q-btn v-close-popup flat color="primary" label="OK" />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
   </q-page>
 </template>

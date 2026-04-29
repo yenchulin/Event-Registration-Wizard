@@ -241,7 +241,7 @@ const isSubmissionLoading = ref(false)
 async function submitRegistration() {
   validateAttendee()
   validateSelectedSessions()
-  if (!isAttendeeValid.value || !isSelectedSessionsValid.value) return
+  if (!isAttendeeValid.value || !isSelectedSessionsValid.value) return null
 
   isSubmissionLoading.value = true
   try {
