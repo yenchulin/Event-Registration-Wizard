@@ -50,6 +50,15 @@ function validateAttendee() {
     : 'Shipping address is required for merchandise orders'
 }
 
+function resetAttendee() {
+  attendee.fullName = ''
+  attendee.email = ''
+  attendee.phone = ''
+  attendee.company = ''
+  attendee.jobTitle = ''
+  attendee.shippingAddress = ''
+}
+
 /** ticket selection */
 const selectedTicketTypeId = ref(event.ticketTypes[0]?.id ?? '')
 const ticketTypes = computed(() => event.ticketTypes ?? [])
@@ -60,6 +69,10 @@ const ticketPrice = computed(() => selectedTicket.value?.price ?? 0)
 
 function selectTicketType(ticketTypeId) {
   selectedTicketTypeId.value = ticketTypeId
+}
+
+function resetTicketSelection() {
+  selectedTicketTypeId.value = ticketTypes.value[0]?.id ?? ''
 }
 
 /** session selection */
@@ -118,6 +131,10 @@ function validateSelectedSessions() {
     }
   }
   selectedSessionErrorMsg.value = ''
+}
+
+function resetSessionSelection() {
+  selectedSessionIds.value = new Set([])
 }
 
 /** addons selection */
@@ -199,9 +216,43 @@ function updateAddonSize(addonId, size) {
   addonSelectionState[addonId].size = size
 }
 
+function resetAddonSelection() {
+  Object.keys(addonSelectionState).forEach((addonId) => {
+    addonSelectionState[addonId].quantity = 0
+    addonSelectionState[addonId].size = addonsById.value[addonId].sizes?.[0] ?? ''
+  })
+}
+
+/** general */
 const totalPrice = computed(() =>
   Math.max(ticketPrice.value + addonsPrice.value - workshopVipDiscount.value, 0)
 )
+
+function resetWizardState() {
+  resetAttendee()
+  resetTicketSelection()
+  resetSessionSelection()
+  resetAddonSelection()
+}
+
+/** submission state */
+const isSubmissionLoading = ref(false)
+
+async function submitRegistration() {
+  validateAttendee()
+  validateSelectedSessions()
+  if (!isAttendeeValid.value || !isSelectedSessionsValid.value) return
+
+  isSubmissionLoading.value = true
+  try {
+    await new Promise((resolve) => setTimeout(resolve, 1500))
+    return { success: true, confirmationCode: '47291' }
+  } catch (e) {
+    return { success: false, error: 'Failed to submit registration. Please try again.' }
+  } finally {
+    isSubmissionLoading.value = false
+  }
+}
 
 export function useRegistrationWizard() {
   return {
@@ -236,6 +287,11 @@ export function useRegistrationWizard() {
     increaseAddonQuantity,
     decreaseAddonQuantity,
     updateAddonSize,
+    /** general */
+    resetWizardState,
     totalPrice,
+    /** submission state */
+    isSubmissionLoading,
+    submitRegistration,
   }
 }

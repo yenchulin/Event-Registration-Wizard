@@ -3,11 +3,11 @@ import StepReviewSubmit from '@/components/wizard/steps/StepReviewSubmit.vue'
 import StepAttendeeInfo from '@/components/wizard/steps/StepAttendeeInfo.vue'
 import StepSessionSelection from '@/components/wizard/steps/StepSessionSelection.vue'
 import StepAddons from '@/components/wizard/steps/StepAddons.vue'
-import Logo from '@/assets/icons/Logo.svg'
 import BaseButton from '@/components/wizard/BaseButton.vue'
 import { useWizardSteps } from '@/composables/useWizardSteps'
 import { useRegistrationWizard } from '@/composables/useRegistrationWizard'
 import { WIZARD_STEP_KEYS } from '@/utils/constants'
+import { useRouter } from 'vue-router'
 
 const actionType = {
   next: 0,
@@ -44,9 +44,9 @@ const wizardSteps = [
   },
 ]
 
+const router = useRouter()
 const { currentStep, goBack, goNext } = useWizardSteps()
-const { isAttendeeValid, isSelectedSessionsValid, validateAttendee, validateSelectedSessions } =
-  useRegistrationWizard()
+const { isAttendeeValid, isSelectedSessionsValid, submitRegistration } = useRegistrationWizard()
 
 function isStepError(stepId) {
   if (stepId == WIZARD_STEP_KEYS.attendeeInfo.id) {
@@ -59,8 +59,16 @@ function isStepError(stepId) {
 }
 
 function handleSubmitRegistration() {
-  validateAttendee()
-  validateSelectedSessions()
+  submitRegistration().then((result) => {
+    if (result.success) {
+      router.push({
+        name: 'registration-success',
+        params: { confirmationCode: result.confirmationCode },
+      })
+    } else {
+      console.error(result.error)
+    }
+  })
 }
 </script>
 
