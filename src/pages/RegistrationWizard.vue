@@ -65,51 +65,38 @@ function handleSubmitRegistration() {
 </script>
 
 <template>
-  <q-layout>
-    <q-page-container>
-      <q-page class="bg-surface-l0">
-        <div class="px-12 py-4 flex gap-3 items-center">
-          <img :src="Logo" />
-          <span class="text-h4 text-neutral">WebDev Summit 2028</span>
-        </div>
-
-        <q-separator color="divider-default" />
-
-        <div class="px-30">
-          <q-stepper v-model="currentStep" flat header-nav color="primary">
-            <q-step
-              v-for="step in wizardSteps"
-              :key="step.id"
-              :name="step.id"
-              :title="step.title"
-              :prefix="`${step.id}`"
-              :done="currentStep > step.id && !isStepError(step.id)"
-              :error="isStepError(step.id)"
-              done-icon="check"
-              error-icon="info"
+  <q-page>
+    <q-stepper v-model="currentStep" flat header-nav color="primary" class="px-30">
+      <q-step
+        v-for="step in wizardSteps"
+        :key="step.id"
+        :name="step.id"
+        :title="step.title"
+        :prefix="`${step.id}`"
+        :done="currentStep > step.id && !isStepError(step.id)"
+        :error="isStepError(step.id)"
+        done-icon="check"
+        error-icon="info"
+      >
+        <component :is="step.component" />
+        <q-stepper-navigation>
+          <div class="flex justify-between">
+            <base-button v-if="step.hasBack" :is-primary="false" @click="goBack">
+              Back
+            </base-button>
+            <div v-else></div>
+            <base-button v-if="step.action.type === actionType.next" @click="goNext">
+              {{ step.action.label }}
+            </base-button>
+            <base-button
+              v-else-if="step.action.type === actionType.submit"
+              @click="handleSubmitRegistration"
             >
-              <component :is="step.component" />
-              <q-stepper-navigation>
-                <div class="flex justify-between">
-                  <base-button v-if="step.hasBack" :is-primary="false" @click="goBack">
-                    Back
-                  </base-button>
-                  <div v-else></div>
-                  <base-button v-if="step.action.type === actionType.next" @click="goNext">
-                    {{ step.action.label }}
-                  </base-button>
-                  <base-button
-                    v-else-if="step.action.type === actionType.submit"
-                    @click="handleSubmitRegistration"
-                  >
-                    {{ step.action.label }}
-                  </base-button>
-                </div>
-              </q-stepper-navigation>
-            </q-step>
-          </q-stepper>
-        </div>
-      </q-page>
-    </q-page-container>
-  </q-layout>
+              {{ step.action.label }}
+            </base-button>
+          </div>
+        </q-stepper-navigation>
+      </q-step>
+    </q-stepper>
+  </q-page>
 </template>
