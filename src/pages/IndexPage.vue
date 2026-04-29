@@ -43,7 +43,7 @@ const wizardSteps = [
   },
 ]
 
-const { currentStep, goBack, goNext } = useWizardSteps(wizardSteps.length)
+const { currentStep, goBack, goNext } = useWizardSteps()
 </script>
 
 <template>
