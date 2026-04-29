@@ -6,6 +6,7 @@ import StepAddons from '@/components/wizard/steps/StepAddons.vue'
 import Logo from '@/assets/icons/Logo.svg'
 import BaseButton from '@/components/wizard/BaseButton.vue'
 import { useWizardSteps } from '@/composables/useWizardSteps'
+import { useRegistrationWizard } from '@/composables/useRegistrationWizard'
 import { WIZARD_STEP_KEYS } from '@/utils/constants'
 
 const actionType = {
@@ -44,6 +45,11 @@ const wizardSteps = [
 ]
 
 const { currentStep, goBack, goNext } = useWizardSteps()
+const { validateAttendee } = useRegistrationWizard()
+
+function handleSubmitRegistration() {
+  validateAttendee()
+}
 </script>
 
 <template>
@@ -78,7 +84,10 @@ const { currentStep, goBack, goNext } = useWizardSteps()
                   <base-button v-if="step.action.type === actionType.next" @click="goNext">
                     {{ step.action.label }}
                   </base-button>
-                  <base-button v-else-if="step.action.type === actionType.submit">
+                  <base-button
+                    v-else-if="step.action.type === actionType.submit"
+                    @click="handleSubmitRegistration"
+                  >
                     {{ step.action.label }}
                   </base-button>
                 </div>

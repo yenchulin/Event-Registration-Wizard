@@ -9,12 +9,25 @@ import { computed } from 'vue'
 
 const {
   attendee,
+  attendeeErrorMsgs,
+  isAttendeeValid,
   selectedTicket,
   selectedSessions,
   selectedAddons,
   workshopVipDiscount,
+  isShippingRequired,
   totalPrice,
 } = useRegistrationWizard()
+
+const errorAttendeeInfo = computed(() =>
+  Object.entries(attendeeErrorMsgs).reduce((acc, [key, error]) => {
+    if (error.required !== '' || error.format !== '') {
+      acc[key] = error
+    }
+    return acc
+  }, {})
+)
+
 const sessionSortByDate = computed(() => {
   return selectedSessions.value.toSorted((a, b) => {
     return moment(a.date).diff(moment(b.date))
@@ -26,33 +39,70 @@ const sessionSortByDate = computed(() => {
   <section class="grid gap-6">
     <span class="text-h3 text-neutral">Review Your Registration</span>
 
+    <div
+      v-if="!isAttendeeValid"
+      class="flex flex-col grid gap-2 p-4 border border-solid border-danger-muted rounded-md bg-danger-muted-rest"
+    >
+      <span class="text-body-sm-medium text-danger"
+        >Please fix the following errors before submitting</span
+      >
+      <span
+        v-for="error in errorAttendeeInfo"
+        :key="error.key"
+        class="text-body-sm-regular text-danger"
+        >• Step 1: {{ error.required || error.format }}</span
+      >
+    </div>
+
     <review-block
-      :title="WIZARD_STEP_KEYS.attendeeInfo.label"
+      title="Attendee Information"
       :step-id="WIZARD_STEP_KEYS.attendeeInfo.id"
+      :is-invalid="!isAttendeeValid"
     >
       <div class="flex justify-between items-center">
         <span class="text-body-sm-regular text-neutral-muted">Name</span>
-        <span class="text-body-sm-regular text-neutral">{{ attendee.fullName }}</span>
+        <span v-if="attendeeErrorMsgs.fullName.required" class="text-body-sm-regular text-danger"
+          >— (required)</span
+        >
+        <span v-else class="text-body-sm-regular text-neutral">{{ attendee.fullName }} </span>
       </div>
 
       <div class="flex justify-between items-center">
         <span class="text-body-sm-regular text-neutral-muted">Email</span>
-        <span class="text-body-sm-regular text-neutral">{{ attendee.email }}</span>
+        <span v-if="attendeeErrorMsgs.email.required" class="text-body-sm-regular text-danger"
+          >— (required)</span
+        >
+        <span v-else-if="attendeeErrorMsgs.email.format" class="text-body-sm-regular text-danger">{{
+          attendee.email
+        }}</span>
+        <span v-else class="text-body-sm-regular text-neutral">{{ attendee.email }}</span>
       </div>
 
       <div class="flex justify-between items-center">
         <span class="text-body-sm-regular text-neutral-muted">Phone</span>
-        <span class="text-body-sm-regular text-neutral">{{ attendee.phone }}</span>
+        <span v-if="attendeeErrorMsgs.phone.required" class="text-body-sm-regular text-danger"
+          >— (required)</span
+        >
+        <span v-else-if="attendeeErrorMsgs.phone.format" class="text-body-sm-regular text-danger">{{
+          attendee.phone
+        }}</span>
+        <span v-else class="text-body-sm-regular text-neutral">{{ attendee.phone }}</span>
       </div>
 
       <div class="flex justify-between items-center">
         <span class="text-body-sm-regular text-neutral-muted">Company</span>
-        <span class="text-body-sm-regular text-neutral">{{ attendee.company }}</span>
+        <span v-if="attendeeErrorMsgs.company.required" class="text-body-sm-regular text-danger"
+          >— (required)</span
+        >
+        <span v-else class="text-body-sm-regular text-neutral">{{ attendee.company }}</span>
       </div>
 
       <div class="flex justify-between items-center">
         <span class="text-body-sm-regular text-neutral-muted">Job Title</span>
-        <span class="text-body-sm-regular text-neutral">{{ attendee.jobTitle }}</span>
+        <span v-if="attendeeErrorMsgs.jobTitle.required" class="text-body-sm-regular text-danger"
+          >— (required)</span
+        >
+        <span v-else class="text-body-sm-regular text-neutral">{{ attendee.jobTitle }}</span>
       </div>
 
       <div class="flex justify-between items-center">
@@ -62,13 +112,18 @@ const sessionSortByDate = computed(() => {
         >
       </div>
 
-      <div v-if="attendee.shippingAddress" class="flex justify-between items-center">
+      <div v-if="isShippingRequired" class="flex justify-between items-center">
         <span class="text-body-sm-regular text-neutral-muted">Shipping Address</span>
-        <span class="text-body-sm-regular text-neutral">{{ attendee.shippingAddress }}</span>
+        <span
+          v-if="attendeeErrorMsgs.shippingAddress.required"
+          class="text-body-sm-regular text-danger"
+          >— (required for merchandise)</span
+        >
+        <span v-else class="text-body-sm-regular text-neutral">{{ attendee.shippingAddress }}</span>
       </div>
     </review-block>
 
-    <review-block :title="WIZARD_STEP_KEYS.sessions.label" :step-id="WIZARD_STEP_KEYS.sessions.id">
+    <review-block title="Selected Sessions" :step-id="WIZARD_STEP_KEYS.sessions.id">
       <div
         v-for="session in sessionSortByDate"
         :key="session.id"
@@ -81,7 +136,7 @@ const sessionSortByDate = computed(() => {
       </div>
     </review-block>
 
-    <review-block :title="WIZARD_STEP_KEYS.addons.label" :step-id="WIZARD_STEP_KEYS.addons.id">
+    <review-block title="Addons" :step-id="WIZARD_STEP_KEYS.addons.id">
       <div
         v-for="addon in selectedAddons"
         :key="addon.id"
