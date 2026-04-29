@@ -1,6 +1,7 @@
 <script setup>
 import { useRegistrationWizard } from '@/composables/useRegistrationWizard'
 import InputField from '@/components/wizard/InputField.vue'
+import { formatCurrency } from '@/utils'
 
 const {
   attendee,
@@ -32,7 +33,7 @@ const {
         >
           <div class="flex justify-between items-center">
             <span class="text-subtitle1">{{ ticket.name }}</span>
-            <span class="text-subtitle1">${{ ticket.price }}</span>
+            <span class="text-subtitle1">{{ formatCurrency(ticket.price) }}</span>
           </div>
           <span class="text-body-sm-regular text-neutral-muted">{{ ticket.description }}</span>
           <div v-for="perk in ticket.perks" :key="perk" class="flex items-center gap-2">
