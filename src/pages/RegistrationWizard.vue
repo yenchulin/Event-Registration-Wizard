@@ -46,7 +46,8 @@ const wizardSteps = [
 
 const router = useRouter()
 const { currentStep, goBack, goNext } = useWizardSteps()
-const { isAttendeeValid, isSelectedSessionsValid, submitRegistration } = useRegistrationWizard()
+const { isAttendeeValid, isSelectedSessionsValid, isSubmissionLoading, submitRegistration } =
+  useRegistrationWizard()
 
 function isStepError(stepId) {
   if (stepId == WIZARD_STEP_KEYS.attendeeInfo.id) {
@@ -73,7 +74,7 @@ function handleSubmitRegistration() {
 </script>
 
 <template>
-  <q-page>
+  <q-page class="relative">
     <q-stepper v-model="currentStep" flat header-nav color="primary" class="px-30">
       <q-step
         v-for="step in wizardSteps"
@@ -106,5 +107,8 @@ function handleSubmitRegistration() {
         </q-stepper-navigation>
       </q-step>
     </q-stepper>
+    <q-inner-loading :showing="isSubmissionLoading">
+      <q-spinner-dots size="50px" color="primary" />
+    </q-inner-loading>
   </q-page>
 </template>
